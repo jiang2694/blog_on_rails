@@ -5,7 +5,7 @@
 
 
   <button class="edit"><%= link_to "Edit", edit_post_path(@post) %></button>
-  <button class="delete"><%= link_to "Delete", post_path(@post), method: :delete, form: { data: { turbo_confirm: "Are you sure?" } }%></button>
+  <%= button_to "Delete", @post, method: :delete, form: { data: {turbo_confirm: "Are you sure?" } }, class:"btn btn-outline-danger" %>
 </div>
 <hr>
 
