@@ -25,7 +25,22 @@
             <li class="nav-item">
               <a class="nav-link" href="<%= root_path %>">Home</a>
             </li>
-              
+               <% if user_signed_in? %>
+            <li>
+              <%= link_to current_user.name, edit_user_path(current_user.id) %>
+            </li>
+            <li>
+              <%= button_to 'Sign Out', session_path(current_user.id), method: :delete %>
+            </li>
+          <% else %>
+          <li class="nav-item">
+              <a class="nav-link" href="<%= new_session_path %>">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<%= new_user_path %>">Sign Up</a>
+            </li>
+            
+          <% end %>
         </div>
       </div>
     </nav>
