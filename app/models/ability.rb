@@ -43,6 +43,8 @@ class Ability < ApplicationRecord
       comment.user == user || comment.post.user == user
     end
 
-    can :crud, User, id: user.id
+    can :crud, User do |current_user|
+      current_user == user
+    end
   end
 end

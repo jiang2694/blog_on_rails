@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-  before_action :authenticated_user!, except: %i[new create]
-  before_action :find_user, only: %i[edit update]
-  before_action :authorized_user!, only: %i[edit update]
+  before_action :find_user, only: [:edit, :update, :update_password, :change_password]
+  before_action :authenticate_user!, only: [:edit]
+  before_action :authorized_user!, only: [:edit, :update]
+
 
   def new
     @user = User.new
@@ -17,7 +18,9 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    
+  end
 
   def update
     if @user.update params.require(:user).permit(:name, :email, :password, :password_confirmation)
@@ -29,7 +32,6 @@ class UsersController < ApplicationController
   end
 
   def change_password
-    @user = User.new
   end
 
   def update_password    
@@ -50,12 +52,16 @@ class UsersController < ApplicationController
 
   private
 
+  def user_params
+    params.require(:user).permit(:name,:email,:password,:password_confirmation)
+  end
+
   def find_user
-    @user = User.find_by_id params[:id]
+    @user = current_user
   end
 
   def authorized_user!
-    redirect_to root_path, alert: "Not authorized" unless can?(:crud, @user)
+    redirect_to root_path, alert: "Not authorized" unless can?(:crud, user)
   end
   
 end
