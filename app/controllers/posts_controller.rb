@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
-
-  before_action :find_post, only: [:edit, :update, :show, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :find_post, only: [:show, :edit, :destroy, :update]
 
   def new
     @post = Post.new
@@ -21,8 +21,8 @@ class PostsController < ApplicationController
   end
 
   def show  
-    @comments = @post.comments.order(created_at: :desc)
     @comment = Comment.new
+    @comments = @post.comments.order(created_at: :desc)
   end
 
   def edit
@@ -44,12 +44,11 @@ class PostsController < ApplicationController
 
   private
 
-  def find_post
-    @post = Post.find params[:id]
-  end
-
   def post_params
     params.require(:post).permit(:title, :body)
-  end
+end
 
+def find_post
+  @post = Post.find params[:id]
+end
 end
